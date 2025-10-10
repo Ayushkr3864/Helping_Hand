@@ -23,10 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 # Android
-android/.gradle/
-android/app/build/
-android/build/
-android/captures/
+
+frontend/dist/
+frontend/android/
+frontend/ios/
 
 # iOS
 ios/Pods/
