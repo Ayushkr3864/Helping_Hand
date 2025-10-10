@@ -24,9 +24,9 @@ dist-ssr
 *.sw?
 # Android
 
-frontend/dist/
-frontend/android/
-frontend/ios/
+Frontend/dist/
+Frontend/android/
+Frontend/ios/
 
 # iOS
 ios/Pods/

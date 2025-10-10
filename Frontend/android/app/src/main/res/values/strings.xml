@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Helping Hand</string>
+    <string name="title_activity_main">Helping Hand</string>
+    <string name="package_name">com.helping.hand</string>
+    <string name="custom_url_scheme">com.helping.hand</string>
+</resources>
