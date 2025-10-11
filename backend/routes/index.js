@@ -12,13 +12,32 @@ const donateModel = require("../models/donate");
 var Path = require("path");
 const AdminModel = require("../models/admin");
 const isAdmin = require("../middleware/isadmin");
-const EventModel =  require("../models/events")
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + Path.extname(file.originalname));
+const EventModel = require("../models/events")
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "uploads/");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + Path.extname(file.originalname));
+//   },
+// });
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+console.log("Cloudinary config:", cloudinary.config());
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "uploads",
+    resource_type: "image",
+    // remove 'format' to keep original file type
   },
 });
 const upload = multer({ storage });
@@ -99,7 +118,15 @@ app.post("/api/admin/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-app.post("/api/register", upload.single("profileImg"), async (req, res) => {
+app.post("/api/register", (req, res, next) => {
+  upload.single("profileImg")(req, res, function (err) {
+    if (err) {
+      console.error("Upload error:", err);
+      return res.status(400).json({ message: "Image upload failed ❌", error: err.message });
+    }
+    next();
+  });
+}, async (req, res) => {
   try {
     const {
       fullName,
@@ -111,15 +138,7 @@ app.post("/api/register", upload.single("profileImg"), async (req, res) => {
       Interest,
       password,
     } = req.body;
-    const profileImg = req.file ? req.file.filename : null;
-    const salt = await Bcrypt.genSalt(10);
-    const hashPassword = await Bcrypt.hash(password, salt);
-    console.log(req.body);
-    const userEmail = await userModel.findOne({ Email });
-    if (userEmail) {
-      return res.json({ message: "user exist" });
-    } else {
-      const userCreated = await userModel.create({
+      const requiredFields = [
         fullName,
         Phone,
         Email,
@@ -127,21 +146,48 @@ app.post("/api/register", upload.single("profileImg"), async (req, res) => {
         Address,
         Availability,
         Interest,
-        password: hashPassword,
-        profileImg,
-      });
-      res.status(200).json({
-        userCreated: {
-          ...userCreated._doc,
-          profileImg: `http://localhost:3000${profileImg}`,
-        },
-        message: "register successful",
-      });
+        password,
+      ];
+      if (requiredFields.some((field) => !field || field.trim() === "")) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+    
+    const profileImg = req.file ? req.file.path : null;
+    console.log("File received:", req.file);
+
+    const salt = await Bcrypt.genSalt(10);
+    const hashPassword = await Bcrypt.hash(password, salt);
+
+    const userEmail = await userModel.findOne({ Email });
+    if (userEmail) {
+      return res.status(400).json({ message: "User already exists. Please login." });
     }
+
+    const userCreated = await userModel.create({
+      fullName,
+      Phone,
+      Email,
+      Age,
+      Address,
+      Availability,
+      Interest,
+      password: hashPassword,
+      profileImg,
+    });
+
+    res.status(200).json({
+      userCreated: {
+        ...userCreated._doc,
+        profileImg,
+      },
+      message: "Registered successfully ✅",
+    });
   } catch (err) {
-    res.status(500).json({ message: `error form register ${err}` });
+    console.error("Registration error:", err);
+    res.status(500).json({ message: "Error registering user ❌", error: err.message });
   }
 });
+
 app.get("/user", isLoggedIn, async (req, res) => {
   try {
     const userData = req.user;
@@ -161,11 +207,11 @@ app.get("/user", isLoggedIn, async (req, res) => {
   }
 });
 app.post("/Donate", isLoggedIn, async (req, res) => {
-  const user = await userModel.findOne({ Email: req.user.Email });
+  try {
+    const user = await userModel.findOne({ Email: req.user.Email });
   console.log(user);
   const { Phone, DonationType, Amount, itemName } = req.body;
   console.log(req.body);
-
   const Donated = await donateModel.create({
     Phone,
     DonationType,
@@ -173,9 +219,15 @@ app.post("/Donate", isLoggedIn, async (req, res) => {
     itemName,
     user: req.user.id,
   });
-  res.json({ donated: Donated });
+  res.json({
+    donated: Donated,
+    message: "🎉 Donation successful! Thank you for your support.",
+  });
   // user.Donate.push(Donated._id)
   await user.save();
+  } catch (e) {
+    res.status(500).json({message:e.message})
+ }
 });
 app.get("/find/donate", isLoggedIn, async (req, res) => {
   try {

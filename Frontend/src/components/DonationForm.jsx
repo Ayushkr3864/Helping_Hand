@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import AsideBar from "./AsideBar";
 import { useAuth } from "../store/Auth";
+import Toast from "./Toast"; // import the new component
 
 function Donation() {
   const { getTokenFromLS } = useAuth();
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState("success");
+  const [toastMessage, setToastMessage] = useState("");
 
   const [donateData, setDonateData] = useState({
     Phone: "",
-    DonationType: "money", // default value
+    DonationType: "money",
     Amount: "",
     itemName: "",
   });
@@ -19,10 +23,12 @@ function Donation() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const token = getTokenFromLS();
     if (!token) {
-      alert("You must be logged in to donate.");
+      setToastType("error");
+      setToastMessage("You must be logged in to donate.");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);
       return;
     }
 
@@ -39,7 +45,8 @@ function Donation() {
       const res_data = await res.json();
 
       if (res.ok) {
-        alert("Donation successful! 💙");
+        setToastType("success");
+        setToastMessage(res_data.message || "Donation successful!");
         setDonateData({
           Phone: "",
           DonationType: "money",
@@ -47,11 +54,18 @@ function Donation() {
           itemName: "",
         });
       } else {
-        alert(res_data.message || "Donation failed ❌");
+        setToastType("error");
+        setToastMessage(res_data.message || "Donation failed ❌");
       }
+
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);
     } catch (err) {
       console.error("Error submitting donation:", err);
-      alert("Server error ❌");
+      setToastType("error");
+      setToastMessage("Server error ❌");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 4000);
     }
   };
 
@@ -59,10 +73,7 @@ function Donation() {
     <div className="min-h-screen flex bg-blue-50">
       <AsideBar />
       <main className="flex-1 p-6 space-y-8">
-        <div
-          id="donations"
-          className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200 max-w-md mx-auto"
-        >
+        <div className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200 max-w-md mx-auto">
           <h2 className="text-xl font-semibold text-blue-800 mb-4">
             Make a Donation
           </h2>
@@ -142,6 +153,9 @@ function Donation() {
             </button>
           </form>
         </div>
+
+        {/* Toast Notification */}
+        <Toast message={toastMessage} type={toastType} show={showToast} />
       </main>
     </div>
   );

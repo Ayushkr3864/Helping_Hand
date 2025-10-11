@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import AsideBar from "../components/AsideBar";
+import { motion } from "framer-motion";
+
 function Programs() {
   const [events, setEvents] = useState([]);
   const [notices, setNotices] = useState([
@@ -33,53 +36,93 @@ function Programs() {
   }, []);
 
   return (
-    <div className="min-h-screen flex bg-blue-50">
+    <div className="min-h-screen flex bg-teal-50">
+    
       <main className="flex-1 p-6 space-y-8">
-        <div id="events" className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div
+          id="events"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0, y: 20 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { staggerChildren: 0.2 },
+            },
+          }}
+        >
           {/* Events */}
-          <div className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200">
-            <h2 className="text-xl font-semibold text-blue-800 mb-4">
+          <motion.div
+            className="bg-white shadow-xl rounded-2xl p-6 border border-teal-300"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            <motion.h2
+              className="text-xl font-semibold text-teal-800 mb-4"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+            >
               Upcoming Events
-            </h2>
-            <ul className="space-y-3 text-blue-900">
+            </motion.h2>
+            <ul className="space-y-3 text-teal-900">
               {events.length > 0 ? (
-                events.map((event) => (
-                  <li
-                    key={event._id}
-                    className="p-3 bg-blue-50 rounded-lg border border-blue-200"
+                events.map((event, index) => (
+                  <motion.li
+                    key={event._id || index}
+                    className="p-3 bg-teal-100 rounded-lg border border-teal-300"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
                   >
-                    <p className="font-semibold text-blue-800">
+                    <p className="font-semibold text-teal-800">
                       {new Date(event.date).toLocaleDateString()}: {event.name}
                     </p>
-                    <h1 className="text-blue-700 text-2xl mt-1">{event.description}</h1>
-                  </li>
+                    <p className="text-teal-700 mt-1">{event.description}</p>
+                  </motion.li>
                 ))
               ) : (
                 <li>No events available.</li>
               )}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Notices */}
-          <div
+          <motion.div
             id="notices"
-            className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200"
+            className="bg-white shadow-xl rounded-2xl p-6 border border-amber-300"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 },
+            }}
           >
-            <h2 className="text-xl font-semibold text-blue-800 mb-4">
+            <motion.h2
+              className="text-xl font-semibold text-amber-800 mb-4"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4 }}
+            >
               Notices
-            </h2>
-            <ul className="space-y-3 text-blue-900">
+            </motion.h2>
+            <ul className="space-y-3 text-amber-900">
               {notices.map((notice, index) => (
-                <li
+                <motion.li
                   key={index}
-                  className="p-3 bg-yellow-50 rounded-lg border border-yellow-200"
+                  className="p-3 bg-amber-100 rounded-lg border border-amber-300"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
                   {notice}
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </main>
     </div>
   );

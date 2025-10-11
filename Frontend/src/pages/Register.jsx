@@ -1,8 +1,13 @@
 import { stringify } from "postcss";
 import React, { useState } from "react";
 import { useAuth } from "../store/Auth";
+import Toast from "../components/Toast";
+import { Navigate } from "react-router";
 
 export default function Register() {
+   const [showToast, setShowToast] = useState(false);
+    const [toastType, setToastType] = useState("success");
+    const [toastMessage, setToastMessage] = useState("");
   const [formData, setformData] = useState({
     fullName: "",
     Phone: "",
@@ -42,9 +47,19 @@ export default function Register() {
     console.log("response data", response);
 
     const res = await response.json();
+    
+    
+
     console.log(res);
     if (response.ok) {
-      alert(`${res.message}`);
+      setShowToast(true)
+      setToastType("success")
+      setToastMessage(res.message || "user register successfully")
+      console.log("Toast triggered:", toastType, toastMessage);
+
+      setTimeout(() => {
+        setShowToast(false)
+      }, 4000);
       setformData({
         fullName: "",
         Phone: "",
@@ -55,8 +70,18 @@ export default function Register() {
         Interest: "",
         password: "",
       });
-
+      <Navigate to="/login" />
       console.log(res);
+    }
+    else {
+      setShowToast(true);
+      setToastMessage(res.message || "error in registration ❌")
+      console.log("Toast triggered:", toastType, toastMessage);
+
+      setToastType("error")
+         setTimeout(() => {
+           setShowToast(false);
+         }, 4000);
     }
   };
 
@@ -80,6 +105,7 @@ export default function Register() {
 
       {/* Right Frame - Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-blue-50">
+        <Toast message={toastMessage} type={toastType} show={showToast} />
         <div className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md border border-blue-200">
           <h2 className="text-center text-3xl font-bold text-blue-900 mb-6">
             Create Account
@@ -88,7 +114,11 @@ export default function Register() {
             Together, we can make a difference 🌍
           </p>
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
+          <form
+            className="space-y-5"
+            onSubmit={handleSubmit}
+            encType="multipart/form-data"
+          >
             {/* Full Name */}
             <input
               type="text"
