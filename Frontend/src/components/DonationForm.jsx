@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AsideBar from "./AsideBar";
 import { useAuth } from "../store/Auth";
 import Toast from "./Toast"; // import the new component
+import {motion} from "framer-motion"
 
 function Donation() {
   const { getTokenFromLS } = useAuth();
@@ -73,7 +74,11 @@ function Donation() {
     <div className="min-h-screen flex bg-blue-50">
       <AsideBar />
       <main className="flex-1 p-6 space-y-8">
-        <div className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200 max-w-md mx-auto">
+        <motion.div className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200 max-w-md mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{delay:0.2,duration:0.4}}
+        >
           <h2 className="text-xl font-semibold text-blue-800 mb-4">
             Make a Donation
           </h2>
@@ -152,7 +157,7 @@ function Donation() {
               Donate
             </button>
           </form>
-        </div>
+        </motion.div>
 
         {/* Toast Notification */}
         <Toast message={toastMessage} type={toastType} show={showToast} />

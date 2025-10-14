@@ -10,7 +10,7 @@ const { METHODS } = require('http');
 
 var app = express();
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://10.150.119.122:5173"],
+  origin: ["http://localhost:5173", "http://10.150.119.122:5173/"],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 };
