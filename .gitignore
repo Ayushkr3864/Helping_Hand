@@ -1,0 +1,43 @@
+# Environment files
+.env
+Frontend/.env
+Backend/.env
+
+# Dependencies
+node_modules/
+Frontend/node_modules/
+Backend/node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build outputs
+dist/
+dist-ssr/
+Frontend/dist/
+Backend/dist/
+
+# Platform builds
+Frontend/android/
+Frontend/ios/
+
+# Editor and system files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# iOS (if applicable)
+ios/Pods/
+ios/build/
+ios/*.xcworkspace
