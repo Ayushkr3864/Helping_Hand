@@ -33,12 +33,12 @@ function Navbar() {
             <li>
               <NavLink to="/programs">Programs</NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink>Get Involved</NavLink>
             </li>
             <li>
               <NavLink>Contact</NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink>Gallery</NavLink>
             </li>
@@ -70,12 +70,12 @@ function Navbar() {
               <li onClick={() => setIsopen(false)}>
                 <Link to="/about">About</Link>
               </li>
-              <li onClick={() => setIsopen(false)}>
+              {/* <li onClick={() => setIsopen(false)}>
                 <Link to="/programs">Programs</Link>
               </li>
               <li onClick={() => setIsopen(false)}>
                 <Link>Get Involved</Link>
-              </li>
+              </li> */}
               <li onClick={() => setIsopen(false)}>
                 <Link></Link>
               </li>
