@@ -1,21 +1,29 @@
-import { Instagram } from "lucide-react";
+
 import React from "react";
 import { FaInstagram, FaFacebook, FaTwitter, FaLinkedinIn, } from "react-icons/fa";
 import { MdEmail, MdPhone, MdLocationOn } from "react-icons/md";
 import { Link } from "react-router-dom";
 import hand from "../assets/hand.png"
+import { motion } from "framer-motion";
 
 function Footer() {
   return (
     <>
       <div className="bg-[#373a3f] w-full h-full flex justify-around flex-wrap flex-col md:flex-row mt-10 gap-y-5 p-5 text-[#d5dfed]">
         <div className="text-center cursor-pointer">
-          <img src={hand} alt="hand" className="md:h-30 md:w-40 h-20 w-30 mx-25" />
-          <h1 className="text-3xl">HELPING HAND FOUNDATION</h1>
+          <motion.img
+            src={hand}
+            alt="hand"
+            className="md:h-30 md:w-40 h-20 w-30 mx-25"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          />
+          <h1 className="text-3xl font-bold">HELPING HAND FOUNDATION</h1>
           <p>Nurturing the Environment and needy</p>
         </div>
         <div className="flex flex-col text-center">
-          <h1 className="text-2xl">Quick Links</h1>
+          <h1 className="text-2xl font-bold">Quick Links</h1>
           <div className="flex md:gap-x-15 gap-10 justify-center">
             <div className="">
               <Link className="cursor-pointer" to="/about">
@@ -55,7 +63,7 @@ function Footer() {
             </Link>
           </div>
           <div className="text-center">
-            <h1 className="text-2xl">Contact Us</h1>
+            <h1 className="text-2xl font-bold">Contact Us</h1>
             <div className="flex align-middle">
               <MdEmail size={25} />
               <a href="mailto:ak05078189@gmail.com">
