@@ -71,7 +71,7 @@ app.post("/api/auth/google", async (req,res) => {
         profileImg: picture,
         googleId: sub,
       });
-    }
+    } 
     console.log(user);
     
     const jwtToken = jwt.sign(

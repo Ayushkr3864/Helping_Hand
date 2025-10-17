@@ -28,7 +28,7 @@ export default function Login() {
       
       if (response.ok) {
         storeTokenInLS(data.token); // save JWT in localStorage
-       localStorage.setItem("image",data.user.pro)
+       localStorage.setItem("image",data.user.profileImg)
         console.log("Logged in user:", data.message);
         navigate("/dashboard")
       }

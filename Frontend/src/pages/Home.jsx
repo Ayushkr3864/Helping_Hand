@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { delay, motion } from "framer-motion";
 import { Heart, Users, Book, Leaf, Stethoscope } from "lucide-react";
-import hand from "../assets/hand.png"
+import hand from "../assets/hand.png";
 
 function Hero() {
   const [hidden, setHidden] = useState(false);
-   
-
-
 
   const programs = [
     {
@@ -49,37 +46,68 @@ function Hero() {
     <>
       {/* Hero Section */}
       <motion.section
-        initial={{ opacity: 1, y: 0 }}
-        animate={hidden ? { opacity: 0, y: -200 } : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{once:false}}
         className="relative h-[90vh] sm:h-screen  bg-center flex items-center"
-        style={{ backgroundImage: "url('/image.png')", backgroundSize:"cover" }} // place image in /public
+        style={{
+          backgroundImage: "url('/image.png')",
+          backgroundSize: "cover",
+        }} // place image in /public
       >
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/40"></div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-xl px-4 sm:px-6 text-left text-white">
-          <img src={hand} alt="hand" className="md:h-30 md:w-60 h-20 w-30" />
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
+        <div className="relative z-10 md:max-w-xl px-4 sm:px-6 text-left text-white ">
+          <motion.img
+            src="/heart-unscreen.gif"
+            alt="hand"
+            className="md:h-30 md:w-60 h-20 w-30"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          />
+          <motion.h1
+            className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          >
             Helping <br /> Hand <br /> Foundation
-          </h1>
-          <p className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-medium">
+          </motion.h1>
+          <motion.p
+            className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-medium"
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.9 }}
+          >
             Small Steps. Big Change. 🌍
-          </p>
-          <p className="mt-2 text-sm sm:text-base md:text-lg">
+          </motion.p>
+          <motion.p
+            className="mt-2 text-sm sm:text-base md:text-lg"
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 1.1 }}
+          >
             Youth-led non-profit initiative serving underprivileged communities
             with food, education, healthcare, and dignity.
-          </p>
+          </motion.p>
 
           <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <button className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base">
+            <motion.button
+              className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.9, duration: 1.3 }}
+            >
               Donate Now
-            </button>
-            <button className="bg-white hover:bg-gray-100 text-green-700 px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base">
+            </motion.button>
+            <motion.button
+              className="bg-white hover:bg-gray-100 text-green-700 px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.9, duration: 1.3 }}
+            >
               Volunteer
-            </button>
+            </motion.button>
           </div>
         </div>
       </motion.section>
@@ -109,7 +137,7 @@ function Hero() {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: idx * 0.2 }}
-              viewport={{ once: false, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.2 }}
               key={idx}
               className="rounded-2xl shadow-[0_2px_2px_#d0d0d1] hover:shadow-[0_6px_16px_#d0d0d1] transition"
             >
@@ -129,7 +157,7 @@ function Hero() {
       {/* mission section */}
       <section id="programs" className=" sm:py-5 px-4 ">
         <motion.div
-          className="bg-[#26344a] rounded-2xl py-5 shadow-[0_2px_6px_#d0d0d1] hover:shadow-[0_6px_16px_#d0d0d1]"
+          className="bg-[#26344a] rounded-2xl py-5 mt-10 shadow-[0_2px_6px_#d0d0d1] hover:shadow-[0_6px_16px_#d0d0d1]"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -161,16 +189,6 @@ function Hero() {
           </p>
         </motion.div>
       </section>
-      <section id="contact" className="py-16 px-6 bg-[#26344a] text-center">
-        <h3 className="text-3xl font-bold text-green-700">Contact Us</h3>
-        <p className="mt-4 text-[#e6f1ff]">
-          📞 +91-8595717241 | 📧 helpinghandfoundation@gmail.com
-        </p>
-        <p className="mt-2">🌐 Instagram | Facebook | LinkedIn | YouTube</p>
-      </section>
-      <footer className="bg-green-700 text-white py-6 text-center">
-        <p>© 2025 Helping Hand Foundation. All Rights Reserved.</p>
-      </footer>
     </>
   );
 }

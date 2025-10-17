@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import { useAuth } from "../store/Auth";
 import Toast from "../components/Toast";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function Register() {
    const [showToast, setShowToast] = useState(false);
     const [toastType, setToastType] = useState("success");
   const [toastMessage, setToastMessage] = useState(" ");
   const navigate = useNavigate();
+  const { storeTokenInLS } = useAuth();
   const [formData, setformData] = useState({
     fullName: "",
     Phone: "",
@@ -25,7 +27,28 @@ export default function Register() {
     const { name, value } = e.target;
     setformData((prev) => ({ ...prev, [name]: value }));
   };
+   const handleGoogleLogin = async (credentialResponse) => {
+     const token = credentialResponse.credential;
+     try {
+       const response = await fetch("http://localhost:3000/api/auth/google", {
+         method: "post",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ token }),
+       });
 
+       var data = await response.json(); // parse JSON from response
+       console.log(data);
+       
+       if (response.ok) {
+         storeTokenInLS(data.token); // save JWT in localStorage
+         localStorage.setItem("image", data.user.profileImg);
+         console.log("Logged in user:", data.message);
+         navigate("/dashboard");
+       }
+     } catch (e) {
+       console.log(data.error);
+     }
+   };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -209,7 +232,10 @@ export default function Register() {
               Register
             </button>
           </form>
-
+          <div className="mt-2">
+           <GoogleLogin onSuccess={handleGoogleLogin} onError={()=>console.log("login error")
+                         } />
+          </div>
           {/* Footer */}
           <p className="text-center text-sm text-blue-700 mt-6">
             Already have an account?{" "}

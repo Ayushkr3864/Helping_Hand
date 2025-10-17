@@ -16,6 +16,7 @@ import AllDonations from "./pages/Alldonations";
 import AddEvent from "./pages/Addevent";
 import AdminLogin from "./pages/Adminlogin";
 import Programs from "./pages/Programs";
+import Footer from "./components/Footer";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -70,6 +71,7 @@ function App() {
           }
         ></Route>
       </Routes>
+      <Footer/>
     </>
   );
 }

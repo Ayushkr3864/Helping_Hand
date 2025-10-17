@@ -70,10 +70,10 @@ function Navbar() {
               <li onClick={() => setIsopen(false)}>
                 <Link to="/about">About</Link>
               </li>
-              {/* <li onClick={() => setIsopen(false)}>
+              <li onClick={() => setIsopen(false)}>
                 <Link to="/programs">Programs</Link>
               </li>
-              <li onClick={() => setIsopen(false)}>
+              {/* <li onClick={() => setIsopen(false)}>
                 <Link>Get Involved</Link>
               </li> */}
               <li onClick={() => setIsopen(false)}>
