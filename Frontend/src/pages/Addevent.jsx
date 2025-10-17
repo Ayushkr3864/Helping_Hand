@@ -1,42 +1,59 @@
 import React, { useState } from "react";
 import Adminsidebar from "../components/Adminsidebar";
 import { Card, CardContent } from "../components/Card";
+import Toast from "../components/Toast";
 
 function AddEvent() {
+   const [showToast, setShowToast] = useState(false);
+    const [toastType, setToastType] = useState("success");
+    const [toastMessage, setToastMessage] = useState("");
   const [eventData, setEventData] = useState({
     name: "",
     date: "",
     description: "",
-    image: null,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value });
   };
-
-  const handleFileChange = (e) => {
-    setEventData({ ...eventData, image: e.target.files[0] });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("adminToken")
+    const response = await fetch(
+      `https://helping-hand-2pny.onrender.com/add/events`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(eventData),
+      }
+    );
+    const res = await response.json();
+    console.log(res);
+    console.log(response);
+    
+    
+    if (response.ok) {
+      setShowToast(true);
+      setToastType("success");
+      setToastMessage(res.message || "event add successfully");
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2000);
+      setEventData({ name: "", date: "", description: "" });
+    } else {
+      setShowToast(true);
+      setToastMessage(res.message || "error in adding event ❌");
 
-    // For now, just log the data
-    console.log(eventData);
-
-    // TODO: Send data to backend API with FormData if image included
-    const formData = new FormData();
-    formData.append("name", eventData.name);
-    formData.append("date", eventData.date);
-    formData.append("description", eventData.description);
-    if (eventData.image) {
-      formData.append("image", eventData.image);
+      setToastType("error");
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2000);
     }
-
-    // Reset form
-    setEventData({ name: "", date: "", description: "", image: null });
-  };
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -75,14 +92,6 @@ function AddEvent() {
                 className="border p-2 rounded h-24"
                 required
               />
-
-              <input
-                type="file"
-                name="image"
-                onChange={handleFileChange}
-                className="border p-2 rounded"
-              />
-
               <button
                 type="submit"
                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -93,6 +102,7 @@ function AddEvent() {
           </CardContent>
         </Card>
       </div>
+      <Toast message={toastMessage} type={toastType} show={showToast} />
     </div>
   );
 }

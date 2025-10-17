@@ -34,7 +34,7 @@ function Donation() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/Donate", {
+      const res = await fetch("https://helping-hand-2pny.onrender.com/Donate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) return null;
-      const res = await fetch(`http://localhost:3000/user`, {
+      const res = await fetch(`https://helping-hand-2pny.onrender.com/user`, {
         method: "get",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -59,10 +59,13 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem("token");
     if (!token) return null;
     else {
-      const res = await fetch(`http://localhost:3000/find/donate`, {
-        method: "get",
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await fetch(
+        `https://helping-hand-2pny.onrender.com/find/donate`,
+        {
+          method: "get",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       const data = await res.json();
       setdonation(data.summary);
       return data;

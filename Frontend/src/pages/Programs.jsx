@@ -14,11 +14,14 @@ function Programs() {
     const fetchEvents = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:3000/events", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          "https://helping-hand-2pny.onrender.com/events",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (res.status === 401 || res.status === 403) {
           alert("Unauthorized. Please login.");

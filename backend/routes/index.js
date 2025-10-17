@@ -353,7 +353,6 @@ app.post("/add/events", isLoggedIn, isAdmin, async (req, res) => {
       date,
       description,
     });
-
     res
       .status(201)
       .json({ event: newEvent, message: "Event created successfully" });

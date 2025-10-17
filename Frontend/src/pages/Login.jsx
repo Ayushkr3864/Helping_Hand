@@ -18,11 +18,14 @@ export default function Login() {
   const handleGoogleLogin = async (credentialResponse) => {
     const token = credentialResponse.credential;
     try {
-       const response = await fetch("http://localhost:3000/api/auth/google", {
-         method: "post",
-         headers: { "Content-Type": "application/json" },
-         body:JSON.stringify({token})
-       });
+       const response = await fetch(
+         "https://helping-hand-2pny.onrender.com/api/auth/google",
+         {
+           method: "post",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({ token }),
+         }
+       );
       
       let data = await response.json(); // parse JSON from response
       
@@ -45,13 +48,16 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/api/Login`, {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `https://helping-hand-2pny.onrender.com/api/Login`,
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       const res_data = await response.json();
 
       if (response.ok) {

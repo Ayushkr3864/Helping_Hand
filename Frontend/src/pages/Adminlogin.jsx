@@ -8,11 +8,14 @@ export default function AdminLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ Email, password }),
-      });
+      const res = await fetch(
+        "https://helping-hand-2pny.onrender.com/api/admin/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ Email, password }),
+        }
+      );
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem("adminToken", data.token);
