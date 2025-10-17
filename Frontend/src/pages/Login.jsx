@@ -23,21 +23,18 @@ export default function Login() {
          headers: { "Content-Type": "application/json" },
          body:JSON.stringify({token})
        });
-      console.log("response",response);
       
       let data = await response.json(); // parse JSON from response
-      console.log(data);
       
       if (response.ok) {
         storeTokenInLS(data.token); // save JWT in localStorage
-       localStorage.setItem("image",data.user.profileImg)
+       localStorage.setItem("image",data.user.pro)
         console.log("Logged in user:", data.message);
         navigate("/dashboard")
       }
       
     } catch (e) {
      console.log(data.error);
-     
     }
   }
   const handleChange = (e) => {
@@ -56,7 +53,6 @@ export default function Login() {
         body: JSON.stringify(formData),
       });
       const res_data = await response.json();
-      console.log("response data", res_data);
 
       if (response.ok) {
          setShowToast(true);

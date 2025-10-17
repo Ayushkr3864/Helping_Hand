@@ -28,7 +28,6 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("form data", formData);
 
     const form = new FormData();
     Object.keys(formData).forEach((key) => {
@@ -45,14 +44,12 @@ export default function Register() {
       // },
       body: form,
     });
-    console.log("response data", response);
 
     const res = await response.json();
     if (response.ok) {
       setShowToast(true)
       setToastType("success")
       setToastMessage(res.message || "user register successfully")
-      console.log("Toast triggered:", toastType, toastMessage);
       setTimeout(() => {
         setShowToast(false)
       }, 2000);
@@ -68,12 +65,10 @@ export default function Register() {
         password: "",
       });
      setFile(null)
-      console.log(res);
     }
     else {
       setShowToast(true);
       setToastMessage(res.message || "error in registration ❌")
-      console.log("Toast triggered:", toastType, toastMessage);
 
       setToastType("error")
          setTimeout(() => {

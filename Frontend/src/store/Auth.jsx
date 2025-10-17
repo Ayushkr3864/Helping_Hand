@@ -48,13 +48,12 @@ export const AuthProvider = ({ children }) => {
       });
       const data = await res.json();
       setuserData(data);
-      console.log(data);
       
       return data;
     } catch (e) {
       console.log(e.message);
     }
-  }, [getTokenFromLS]);
+  }, []);
   const DonationInfo = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
@@ -66,7 +65,6 @@ export const AuthProvider = ({ children }) => {
       });
       const data = await res.json();
       setdonation(data.summary);
-      console.log(data);
       return data;
     }
     } catch (e) {
