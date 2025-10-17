@@ -15,6 +15,7 @@ const isAdmin = require("../middleware/isadmin");
 const EventModel = require("../models/events")
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const { OAuth2Client } = require("google-auth-library")
 
 
 // const storage = multer.diskStorage({
@@ -32,6 +33,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 console.log("Cloudinary config:", cloudinary.config());
+
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -40,6 +43,47 @@ const storage = new CloudinaryStorage({
     // remove 'format' to keep original file type
   },
 });
+// create a google client
+const client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_REDIRECT_URI
+);
+console.log("client id",process.env.GOOGLE_CLIENT_ID);
+
+// callback route
+app.post("/api/auth/google", async (req,res) => {
+  const {token} = req.body
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience:process.env.GOOGLE_CLIENT_ID
+    })
+    const payload = ticket.getPayload();
+    const { sub, name, email, picture } = payload;
+    console.log("picture",picture);
+    
+    let user = await userModel.findOne({ Email: email });
+    if (!user) {
+      user = await userModel.create({
+        Email: email,
+        fullName: name,
+        profileImg: picture,
+        googleId: sub,
+      });
+    }
+    console.log(user);
+    
+    const jwtToken = jwt.sign(
+      { Email: user.Email, id: user._id, role: "user" },
+      jwtSecret,
+      { expiresIn: "2h" }
+    );
+    res.status(200).json({token:jwtToken,message:"Login Successfully",user:{profileImg: user.profileImg,}})
+  } catch (e) {
+    res.status(500).json({error:e.message})
+   }
+});
 const upload = multer({ storage });
 
 async function createAdmin() {
@@ -47,6 +91,8 @@ async function createAdmin() {
     const existingAdmin = await AdminModel.findOne({ role: "admin" });
     if (!existingAdmin) {
       const hashedPassword = await Bcrypt.hash(process.env.PASSWORD, 10);
+      console.log(hashedPassword);
+      
       const admin = AdminModel.create({
         fullName: process.env.FULL_NAME,
         email: process.env.EMAIL,
@@ -101,8 +147,10 @@ app.post("/api/admin/login", async (req, res) => {
       password,
       process.env.ADMIN_PASSWORD
     );
+    console.log(process.env.ADMIN_PASSWORD);
+    
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid Password" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     // Generate JWT token
@@ -198,8 +246,6 @@ app.get("/user", isLoggedIn, async (req, res) => {
       return res.status(200).json({
         user: user,
         profileImg: user.profileImg
-          ? `http://localhost:3000/uploads/${user.profileImg}`
-          : null,
       });
     }
   } catch (e) {

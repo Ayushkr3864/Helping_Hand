@@ -10,6 +10,7 @@ function AsideBar() {
   const [userData, setuserData] = useState(null)
   const [profileImg, setprofileImg] = useState(null);
   const token = getTokenFromLS();
+  
   useEffect(() => {
     const fetchUser = async () => {
       let userData = await userInfo();
@@ -83,7 +84,7 @@ function AsideBar() {
                 src={
                   userData
                     ? userData.profileImg
-                    : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                    :token.image
                 }
                 alt="Profile"
                 className="w-20 h-20 rounded-full mx-auto mb-3"

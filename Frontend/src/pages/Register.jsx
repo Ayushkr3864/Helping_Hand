@@ -2,12 +2,13 @@ import { stringify } from "postcss";
 import React, { useState } from "react";
 import { useAuth } from "../store/Auth";
 import Toast from "../components/Toast";
-import { Navigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
    const [showToast, setShowToast] = useState(false);
     const [toastType, setToastType] = useState("success");
-    const [toastMessage, setToastMessage] = useState("");
+  const [toastMessage, setToastMessage] = useState(" ");
+  const navigate = useNavigate();
   const [formData, setformData] = useState({
     fullName: "",
     Phone: "",
@@ -47,19 +48,15 @@ export default function Register() {
     console.log("response data", response);
 
     const res = await response.json();
-    
-    
-
-    console.log(res);
     if (response.ok) {
       setShowToast(true)
       setToastType("success")
       setToastMessage(res.message || "user register successfully")
       console.log("Toast triggered:", toastType, toastMessage);
-
       setTimeout(() => {
         setShowToast(false)
-      }, 4000);
+      }, 2000);
+      setTimeout(() => navigate("/login"), 3000);
       setformData({
         fullName: "",
         Phone: "",
@@ -70,7 +67,7 @@ export default function Register() {
         Interest: "",
         password: "",
       });
-      <Navigate to="/login" />
+     setFile(null)
       console.log(res);
     }
     else {
@@ -81,7 +78,7 @@ export default function Register() {
       setToastType("error")
          setTimeout(() => {
            setShowToast(false);
-         }, 4000);
+         }, 2000);
     }
   };
 
@@ -102,7 +99,6 @@ export default function Register() {
           className="w-64 h-64 drop-shadow-xl"
         />
       </div>
-
       {/* Right Frame - Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-blue-50">
         <Toast message={toastMessage} type={toastType} show={showToast} />

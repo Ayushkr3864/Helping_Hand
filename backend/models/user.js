@@ -1,6 +1,12 @@
 const Mongoose = require("mongoose");
+require("dotenv").config();
 // Mongoose.connect("mongodb://127.0.0.1:27017/Helping_hand")
-Mongoose.connect("mongodb://127.0.0.1:27017/Helping_Hand_Foundation")
+const db = process.env.MONGODB_URI;
+console.log(db);
+Mongoose.connect(db, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => {
     console.log("database connected");
   })
@@ -8,6 +14,7 @@ Mongoose.connect("mongodb://127.0.0.1:27017/Helping_Hand_Foundation")
     console.log("error in connection");
   });
 const userSchema = Mongoose.Schema({
+  googleId: String,
   fullName: { type: String },
   Phone: { type: Number },
   Email: { type: String },
@@ -16,7 +23,7 @@ const userSchema = Mongoose.Schema({
   Availability: { type: String },
   Interest: { type: String },
   password: { type: String },
-  profileImg:{type:String},
-  Donate:[{type:Mongoose.Schema.Types.ObjectId,ref:"donate"}]
+  profileImg: { type: String },
+  Donate: [{ type: Mongoose.Schema.Types.ObjectId, ref: "donate" }],
 });
 module.exports = Mongoose.model("user", userSchema);
