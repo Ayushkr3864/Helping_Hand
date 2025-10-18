@@ -84,14 +84,17 @@ function Donation() {
 
     try {
       // Step 1: Create Razorpay order
-      const orderRes = await fetch("http://localhost:3000/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: donateData.Amount * 100, // convert to paise
-          currency: "INR",
-        }),
-      });
+      const orderRes = await fetch(
+        "https://helping-hand-2pny.onrender.com/order",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: donateData.Amount * 100, // convert to paise
+            currency: "INR",
+          }),
+        }
+      );
       const order = await orderRes.json();
 
       if (!order.id) {
