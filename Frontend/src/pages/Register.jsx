@@ -64,13 +64,16 @@ export default function Register() {
     // Append file if selected
     if (file) form.append("profileImg", file);
 
-    const response = await fetch(`http://localhost:3000/api/register`, {
-      method: "POST",
-      // headers: {
-      //   "content-type":"application/json",
-      // },
-      body: form,
-    });
+    const response = await fetch(
+      `https://helping-hand-2pny.onrender.com/api/register`,
+      {
+        method: "POST",
+        // headers: {
+        //   "content-type":"application/json",
+        // },
+        body: form,
+      }
+    );
 
     const res = await response.json();
     if (response.ok) {
