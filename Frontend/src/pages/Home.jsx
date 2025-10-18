@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { delay, motion } from "framer-motion";
 import { Heart, Users, Book, Leaf, Stethoscope } from "lucide-react";
 import hand from "../assets/hand.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Hero() {
   const [hidden, setHidden] = useState(false);
-
+  const navigate = useNavigate()
   const programs = [
     {
       title: "Annapurna Sewa",
@@ -94,7 +94,7 @@ function Hero() {
 
           <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
             <motion.button
-              onClick={() => (window.location.href = "/login")}
+              onClick={() => (navigate("/login"))}
               className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -103,7 +103,7 @@ function Hero() {
               Donate Now
             </motion.button>{" "}
             <motion.button
-              onClick={() => (window.location.href = "/login")}
+              onClick={() => (navigate("/login"))}
               className="bg-white hover:bg-gray-100 text-green-700 px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
