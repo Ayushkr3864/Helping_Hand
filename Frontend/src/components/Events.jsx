@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import AsideBar from "./AsideBar";
 import { motion } from "framer-motion";
-
+import Hamburger from "hamburger-react";
 function Events() {
   const [events, setEvents] = useState([]);
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notices, setNotices] = useState([
     "Tax exemption receipts available for FY 2024–25.",
     "Urgent requirement: Medicines for flood-affected areas.",
@@ -40,8 +41,25 @@ function Events() {
 
   return (
     <div className="min-h-screen flex bg-teal-50">
-      <AsideBar />
-      <main className="flex-1 p-6 space-y-8">
+      <div className="absolute top-10 left-4 z-50 md:hidden">
+        <Hamburger
+          toggled={isSidebarOpen}
+          toggle={setIsSidebarOpen}
+          size={22}
+          color="#1e3a8a"
+        />
+      </div>
+
+      {/* Sidebar */}
+      <div
+        className={`fixed md:static top-0 left-0 h-full z-40 transition-transform duration-300
+          ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0`}
+      >
+        <AsideBar />
+      </div>
+      <main className="flex-1 p-6 mt-5 space-y-8">
         <motion.div
           id="events"
           className="grid grid-cols-1 md:grid-cols-2 gap-6"

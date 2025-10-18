@@ -3,12 +3,14 @@ import AsideBar from "./AsideBar";
 import { useAuth } from "../store/Auth";
 import Toast from "./Toast";
 import { motion } from "framer-motion";
+import Hamburger from "hamburger-react";
 
 function Donation() {
   const { getTokenFromLS } = useAuth();
   const [showToast, setShowToast] = useState(false);
   const [toastType, setToastType] = useState("success");
   const [toastMessage, setToastMessage] = useState("");
+   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [donateData, setDonateData] = useState({
     Phone: "",
@@ -151,8 +153,25 @@ function Donation() {
 
   return (
     <div className="min-h-screen flex bg-blue-50">
-      <AsideBar />
-      <main className="flex-1 p-6 space-y-8">
+      <div className="absolute top-10 left-4 z-50 md:hidden">
+        <Hamburger
+          toggled={isSidebarOpen}
+          toggle={setIsSidebarOpen}
+          size={22}
+          color="#1e3a8a"
+        />
+      </div>
+
+      {/* Sidebar */}
+      <div
+        className={`fixed md:static top-0 left-0 h-full z-40 transition-transform duration-300
+          ${
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0`}
+      >
+        <AsideBar />
+      </div>
+      <main className="flex-1 p-6 space-y-8 mt-5">
         <motion.div
           className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200 max-w-md mx-auto"
           initial={{ opacity: 0, y: 20 }}
