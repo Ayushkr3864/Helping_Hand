@@ -16,6 +16,8 @@ const EventModel = require("../models/events")
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const { OAuth2Client } = require("google-auth-library")
+const Razorpay = require("razorpay");
+const { current } = require("@reduxjs/toolkit");
 
 
 // const storage = multer.diskStorage({
@@ -392,5 +394,56 @@ app.get("/events", isLoggedIn, async (req, res) => {
     res.status(500).json({ message: "Server error ⚠️" });
   }
 });
+
+// razor pay api
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_SECRET,
+});
+app.post("/order", async (req, res) => {
+  const { amount, currency } = req.body;
+
+  const options = {
+    amount: amount, // amount in paise (₹1 = 100)
+    currency: currency || "INR",
+    receipt: "receipt#1",
+    payment_capture: 1,
+  };
+
+  try {
+    const response = await razorpay.orders.create(options);
+    res.json({
+      id: response.id,
+      currency: response.currency,
+      amount: response.amount,
+    });
+  } catch (error) {
+    console.error("Order creation error:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+
+app.get("/payment/:paymentId", async (req, res) => {
+  const { paymentId } = req.params;
+
+  try {
+    const payment = await razorpay.payments.fetch(paymentId);
+    if (!payment) return res.status(404).json({ message: "Payment not found" });
+
+    res.json({
+      status: payment.status,
+      method: payment.method,
+      amount: payment.amount,
+      currency: payment.currency,
+      email: payment.email,
+    });
+  } catch (e) {
+    console.error("Payment fetch error:", e);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 module.exports = app;

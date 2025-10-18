@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import AsideBar from "./AsideBar";
 import { useAuth } from "../store/Auth";
-import Toast from "./Toast"; // import the new component
-import {motion} from "framer-motion"
+import Toast from "./Toast";
+import { motion } from "framer-motion";
 
 function Donation() {
   const { getTokenFromLS } = useAuth();
@@ -26,13 +26,29 @@ function Donation() {
     e.preventDefault();
     const token = getTokenFromLS();
     if (!token) {
-      setToastType("error");
-      setToastMessage("You must be logged in to donate.");
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 4000);
+      showToastMsg("error", "You must be logged in to donate.");
       return;
     }
 
+    if (donateData.DonationType === "item") {
+      // Handle item donation normally
+      return handleItemDonation(token);
+    } else {
+      // Handle money donation with Razorpay
+      return handlePayment(token);
+    }
+  };
+
+  // ✅ Helper: show toast message
+  const showToastMsg = (type, message) => {
+    setToastType(type);
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 4000);
+  };
+
+  // ✅ Handle item donation (existing API)
+  const handleItemDonation = async (token) => {
     try {
       const res = await fetch("https://helping-hand-2pny.onrender.com/Donate", {
         method: "POST",
@@ -42,12 +58,9 @@ function Donation() {
         },
         body: JSON.stringify(donateData),
       });
-
       const res_data = await res.json();
-
       if (res.ok) {
-        setToastType("success");
-        setToastMessage(res_data.message || "Donation successful!");
+        showToastMsg("success", res_data.message || "Donation successful!");
         setDonateData({
           Phone: "",
           DonationType: "money",
@@ -55,18 +68,81 @@ function Donation() {
           itemName: "",
         });
       } else {
-        setToastType("error");
-        setToastMessage(res_data.message || "Donation failed ❌");
+        showToastMsg("error", res_data.message || "Donation failed ❌");
       }
-
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 4000);
     } catch (err) {
       console.error("Error submitting donation:", err);
-      setToastType("error");
-      setToastMessage("Server error ❌");
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 4000);
+      showToastMsg("error", "Server error ❌");
+    }
+  };
+
+  // ✅ Handle money donation with Razorpay
+  const handlePayment = async (token) => {
+    if (!donateData.Amount || donateData.Amount <= 0) {
+      return showToastMsg("error", "Please enter a valid amount.");
+    }
+
+    try {
+      // Step 1: Create Razorpay order
+      const orderRes = await fetch("http://localhost:3000/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: donateData.Amount * 100, // convert to paise
+          currency: "INR",
+        }),
+      });
+      const order = await orderRes.json();
+
+      if (!order.id) {
+        return showToastMsg("error", "Failed to create payment order.");
+      }
+
+      // Step 2: Open Razorpay Checkout
+      const options = {
+        key: "rzp_test_RV0uhX0BeN47LW", // your Razorpay test key
+        amount: order.amount,
+        currency: order.currency,
+        name: "Helping Hand Foundation",
+        description: "Donation Payment",
+        order_id: order.id,
+        handler: async function (response) {
+          // Step 3: Verify payment
+          try {
+            const verifyRes = await fetch(
+              `https://helping-hand-2pny.onrender.com/payment/${response.razorpay_payment_id}`
+            );
+            const verifyData = await verifyRes.json();
+
+            if (verifyRes.ok && verifyData.status === "captured") {
+              showToastMsg("success", "Payment successful! ❤️");
+              // Optionally call your donation save API
+              await handleItemDonation(token);
+              setDonateData({
+                Phone: "",
+                DonationType: "money",
+                Amount: "",
+                itemName: "",
+              });
+            } else {
+              showToastMsg("error", "Payment verification failed ❌");
+            }
+          } catch (err) {
+            console.error("Payment verify error:", err);
+            showToastMsg("error", "Payment verification error ❌");
+          }
+        },
+        prefill: {
+          contact: donateData.Phone,
+        },
+        theme: { color: "#2563eb" },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error("Payment error:", err);
+      showToastMsg("error", "Payment process failed ❌");
     }
   };
 
@@ -74,16 +150,16 @@ function Donation() {
     <div className="min-h-screen flex bg-blue-50">
       <AsideBar />
       <main className="flex-1 p-6 space-y-8">
-        <motion.div className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200 max-w-md mx-auto"
+        <motion.div
+          className="bg-white shadow-lg rounded-2xl p-6 border border-blue-200 max-w-md mx-auto"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{delay:0.2,duration:0.4}}
+          transition={{ delay: 0.2, duration: 0.4 }}
         >
           <h2 className="text-xl font-semibold text-blue-800 mb-4">
             Make a Donation
           </h2>
           <form className="space-y-5" onSubmit={handleSubmit}>
-            {/* Contact Number */}
             <div>
               <label className="block text-blue-700 font-medium mb-1">
                 Contact Number
@@ -99,7 +175,6 @@ function Donation() {
               />
             </div>
 
-            {/* Donation Type */}
             <div>
               <label className="block text-blue-700 font-medium mb-1">
                 Donation Type
@@ -115,7 +190,6 @@ function Donation() {
               </select>
             </div>
 
-            {/* Conditional Fields */}
             {donateData.DonationType === "money" && (
               <div>
                 <label className="block text-blue-700 font-medium mb-1">
@@ -154,12 +228,11 @@ function Donation() {
               type="submit"
               className="w-full p-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-lg hover:from-blue-400 hover:to-blue-500 transition-transform transform hover:scale-105 shadow-md"
             >
-              Donate
+              {donateData.DonationType === "money" ? "Donate & Pay" : "Donate"}
             </button>
           </form>
         </motion.div>
 
-        {/* Toast Notification */}
         <Toast message={toastMessage} type={toastType} show={showToast} />
       </main>
     </div>
