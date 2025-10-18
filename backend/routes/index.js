@@ -17,6 +17,7 @@ const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const { OAuth2Client } = require("google-auth-library")
 const Razorpay = require("razorpay");
+const { isatty } = require("tty");
 
 
 
@@ -444,6 +445,28 @@ app.get("/payment/:paymentId", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
+app.get("/allusers", isLoggedIn, isAdmin, async (req,res) => {
+  const users = await userModel.find();
+  try {
+    if (!users || users.length === 0) {
+   return res.status(404).json({message:"no user found"})
+  } else {
+    res.status(200).json({user:users,message:"user fetch successful"})
+  }
+  } catch (e) {
+    res.status(500).json({message:e.message})
+  }
+})
+ 
+app.get("/alldonations", isLoggedIn, isAdmin, async (req,res) => {
+  const allDonations = await donateModel.find()
+  try {
+    if (allDonations.length === 0) return res.status(404).json({ message: "no donation found" })
+  else {
+  res.status(200).json({message:"donations found",Donations:allDonations})}
+  } catch (e) {
+    res.status(500).json({message:e.message})
+ }
+})
 
 module.exports = app;

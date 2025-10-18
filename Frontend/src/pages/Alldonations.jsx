@@ -30,11 +30,43 @@ const dummyDonations = [
 
 function AllDonations() {
   const [donations, setDonations] = useState([]);
+   const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-  useEffect(() => {
-    // Replace with API call later
-    setDonations(dummyDonations);
-  }, []);
+   useEffect(() => {
+     const fetchDonation = async () => {
+       try {
+         const token = localStorage.getItem("adminToken"); // if you're using JWT auth
+ 
+         const res = await fetch(
+           "https://helping-hand-2pny.onrender.com/alldonations",
+           {
+             method: "GET",
+             headers: {
+               "Content-Type": "application/json",
+               Authorization: `Bearer ${token}`, // include token if route is protected
+             },
+           }
+         );
+ 
+         const data = await res.json();
+         console.log(data);
+         
+         if (!res.ok) {
+           throw new Error(data.message || "Failed to fetch users");
+         }
+ 
+         setDonations(data.Donations || []);
+       } catch (err) {
+         console.error("Error fetching users:", err);
+         setError(err.message);
+       } finally {
+         setLoading(false);
+       }
+     };
+ 
+     fetchDonation();
+   }, []);
 
   return (
     <div className="flex min-h-screen">
@@ -50,12 +82,12 @@ function AllDonations() {
               className="p-4 h-40 flex flex-col justify-between"
             >
               <CardContent>
-                <h2 className="font-semibold">{donation.donor}</h2>
-                <p className="text-sm text-gray-600">{donation.type}</p>
+                <h2 className="font-semibold">{donation.user}</h2>
+                <p className="text-sm text-gray-600">{donation.DonationType}</p>
                 <p className="text-lg font-bold">
-                  {donation.type === "Money"
-                    ? `₹ ${donation.amount}`
-                    : donation.amount}
+                  {donation.DonationType === "money"
+                    ? `₹ ${donation.Amount}`
+                    : donation.itemName}
                 </p>
                 <p className="text-xs text-gray-500">{donation.date}</p>
               </CardContent>

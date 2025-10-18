@@ -70,6 +70,9 @@ function App() {
             </ProtectedRoute>
           }
         ></Route>
+        <Route path="/admin/Alldonations" element={<Adminprotect>
+          <AllDonations/>
+        </Adminprotect>}></Route>
       </Routes>
       <Footer/>
     </>
