@@ -4,6 +4,7 @@ import { useAuth } from "../store/Auth";
 import Toast from "../components/Toast";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import { Link } from "react-router-dom";
 
 export default function Register() {
    const [showToast, setShowToast] = useState(false);
@@ -242,12 +243,12 @@ export default function Register() {
           {/* Footer */}
           <p className="text-center text-sm text-blue-700 mt-6">
             Already have an account?{" "}
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="text-blue-600 font-semibold hover:underline"
             >
               Login
-            </a>
+            </Link>
           </p>
         </div>
       </div>
