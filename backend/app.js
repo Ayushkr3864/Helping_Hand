@@ -11,7 +11,7 @@ const { METHODS } = require('http');
 var app = express();
 const corsOptions = {
   origin: [
-    "https://helping-hand-topaz.vercel.app/",
+    "https://helping-hand-inky.vercel.app/",
     "http://10.150.119.122:5173/",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
