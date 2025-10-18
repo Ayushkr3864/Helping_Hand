@@ -114,6 +114,8 @@ app.post("/api/login", async (req, res) => {
     console.log("login request", req.body)
     // Normal user login
     const user = await userModel.findOne({ Email });
+    console.log("user found",user);
+    
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
     const isMatch = await Bcrypt.compare(password, user.password);
