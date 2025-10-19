@@ -459,7 +459,7 @@ app.get("/allusers", isLoggedIn, isAdmin, async (req,res) => {
 })
  
 app.get("/alldonations", isLoggedIn, isAdmin, async (req,res) => {
-  const allDonations = await donateModel.find()
+  const allDonations = await  donateModel.find()
   try {
     if (allDonations.length === 0) return res.status(404).json({ message: "no donation found" })
   else {
