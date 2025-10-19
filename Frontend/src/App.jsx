@@ -17,6 +17,7 @@ import AddEvent from "./pages/Addevent";
 import AdminLogin from "./pages/Adminlogin";
 import Programs from "./pages/Programs";
 import Footer from "./components/Footer";
+import Pagenotfound from "./pages/Pagenotfound"
 function App() {
   const [count, setCount] = useState(0);
 
@@ -73,6 +74,7 @@ function App() {
         <Route path="/admin/Alldonations" element={<Adminprotect>
           <AllDonations/>
         </Adminprotect>}></Route>
+        <Route path="*" element={<Pagenotfound/>}></Route>
       </Routes>
       <Footer/>
     </>
