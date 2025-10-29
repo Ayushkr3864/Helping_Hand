@@ -37,14 +37,14 @@ export default function VendorDashboard() {
     <>
       <div className=" min-h-screen flex   bg-blue-50">
         {/* Sidebar */}
-        <div className="absolute top-10 left-4 z-50 md:hidden">
+        {/* <div className="absolute top-10 left-4 z-50 md:hidden">
           <Hamburger
             toggled={isSidebarOpen}
             toggle={setIsSidebarOpen}
             size={22}
             color="#1e3a8a"
           />
-        </div>
+        </div> */}
 
         {/* Sidebar */}
         <div

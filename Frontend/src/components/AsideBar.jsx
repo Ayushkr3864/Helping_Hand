@@ -83,17 +83,16 @@ function AsideBar() {
               <img
                 src={
                   userData
-                    ? userData.profileImg
-                    :token.image
+                    ?.userData.profileImg
                 }
                 alt="Profile"
                 className="w-20 h-20 rounded-full mx-auto mb-3"
               />
               <p className="text-center text-blue-900 font-semibold">
-                {userData ? userData.user.fullName : "user"}
+                {userData?.userData.user.fullName}
               </p>
               <p className="text-center text-sm text-blue-600">
-                {userData ? userData.user.Email : "user@gmailcom"}
+                {userData ?.userData.user.Email}
               </p>
             </div>
             <nav className="space-y-3">
