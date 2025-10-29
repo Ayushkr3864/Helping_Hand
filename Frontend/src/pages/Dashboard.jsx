@@ -49,9 +49,7 @@ export default function VendorDashboard() {
         {/* Sidebar */}
         <div
           className={`fixed md:static top-0 left-0 h-full z-40 transition-transform duration-300
-          ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0`}
+        `}
         >
           <AsideBar />
         </div>

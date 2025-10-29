@@ -70,59 +70,7 @@ function AsideBar() {
           </button>
         </nav>
       </aside>
-      <div className="bg-blue-50">
-        <span
-          className="text-[#1e2939] md:hidden flex"
-          onClick={() => setisOpen(!isOpen)}
-        >
-          <Hamburger />
-        </span>
-        {isOpen && (
-          <aside className="w-40 md:w-64 bg-white shadow-lg border-r border-blue-200 md:hidden">
-            <div className="mb-8">
-              <img
-                src={
-                  userData
-                    ?.userData.profileImg
-                }
-                alt="Profile"
-                className="w-20 h-20 rounded-full mx-auto mb-3"
-              />
-              <p className="text-center text-blue-900 font-semibold">
-                {userData?.userData.user.fullName}
-              </p>
-              <p className="text-center text-sm text-blue-600">
-                {userData ?.userData.user.Email}
-              </p>
-            </div>
-            <nav className="space-y-3">
-              <Link
-                to="/dashboard"
-                className="block px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-100"
-              >
-                Dashboard
-              </Link>
-              <Link
-                to="/dashboard/donate"
-                className="block px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-100"
-              >
-                Donate
-              </Link>
-              <Link
-                to="/dashboard/events"
-                className="block px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-100"
-              >
-                Events
-              </Link>
-              <button onClick={handleLogout}>
-                <a className="block px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-100">
-                  Logout
-                </a>
-              </button>
-            </nav>
-          </aside>
-        )}
-      </div>
+    
     </>
   );
 }
