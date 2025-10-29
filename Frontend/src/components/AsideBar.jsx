@@ -25,52 +25,60 @@ function AsideBar() {
   
   return (
     <>
-      <aside className="w-64 bg-white shadow-lg border-r border-blue-200 p-6 hidden md:block">
-        <h2 className="text-2xl font-bold text-blue-900 mb-6">Helping Hand</h2>
-        <div className="mb-8">
+      <aside className="p-6 bg-amber-50 min-h-screen w-80">
+        {/* Profile Section */}
+        <div className="mb-8 text-center">
           <img
             src={
-              userData
-                ? userData.profileImg
-                : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+              userData?.profileImg ||
+              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
             }
             alt="Profile"
-            className="w-20 h-20 rounded-full mx-auto mb-3"
+            className="w-24 h-24 rounded-full mx-auto border-4 border-blue-200 shadow-sm mb-3"
           />
-          <p className="text-center text-blue-900 font-semibold">
-            {userData ? userData.user.fullName : "user"}
+          <p className="text-blue-900 font-bold text-lg">
+            {userData?.user?.fullName || "User"}
           </p>
-          <p className="text-center text-sm text-blue-600">
-            {userData ? userData.user.Email : "user@gmailcom"}
+          <p className="text-sm text-blue-600 truncate">
+            {userData?.user?.Email || "user@gmail.com"}
           </p>
         </div>
-        <nav className="space-y-3">
+
+        {/* Navigation Links */}
+        <nav className="space-y-2">
           <Link
             to="/dashboard"
-            className="block px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-100"
+            className="block px-4 py-2 rounded-lg text-blue-800 font-medium hover:bg-blue-100 transition"
+            onClick={() => setIsOpen(false)}
           >
-            Dashboard
+            🏠 Dashboard
           </Link>
           <Link
             to="/dashboard/donate"
-            className="block px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-100"
+            className="block px-4 py-2 rounded-lg text-blue-800 font-medium hover:bg-blue-100 transition"
+            onClick={() => setIsOpen(false)}
           >
-            Donate
+            💰 Donate
           </Link>
           <Link
             to="/dashboard/events"
-            className="block px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-100"
+            className="block px-4 py-2 rounded-lg text-blue-800 font-medium hover:bg-blue-100 transition"
+            onClick={() => setIsOpen(false)}
           >
-            Events
+            📅 Events
           </Link>
-          <button onClick={handleLogout}>
-            <a className="block px-3 py-2 rounded-lg text-blue-700 hover:bg-blue-100">
-              Logout
-            </a>
+
+          <button
+            onClick={() => {
+              handleLogout();
+              
+            }}
+            className="w-full text-left block px-4 py-2 mt-4 rounded-lg bg-red-600 text-white hover:bg-blue-700 font-semibold transition"
+          >
+            🚪 Logout
           </button>
         </nav>
       </aside>
-    
     </>
   );
 }
