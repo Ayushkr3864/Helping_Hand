@@ -41,14 +41,7 @@ function Events() {
 
   return (
     <div className="min-h-screen flex bg-teal-50">
-      <div className="absolute top-10 left-4 z-50 md:hidden">
-        <Hamburger
-          toggled={isSidebarOpen}
-          toggle={setIsSidebarOpen}
-          size={22}
-          color="#1e3a8a"
-        />
-      </div>
+     
 
       {/* Sidebar */}
       <div
