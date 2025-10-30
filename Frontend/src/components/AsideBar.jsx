@@ -25,7 +25,7 @@ function AsideBar() {
   
   return (
     <>
-      <aside className="p-6 bg-amber-50 min-h-screen w-80">
+      <aside className="p-6 bg-amber-50 min-h-screen hidden md:block w-80">
         {/* Profile Section */}
         <div className="mb-8 text-center">
           <img
