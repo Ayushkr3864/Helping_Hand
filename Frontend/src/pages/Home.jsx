@@ -94,8 +94,25 @@ function Hero() {
           </motion.p>
 
           <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
-           
-           {}
+            <motion.button
+              onClick={() => navigate("/login")}
+              className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.9, duration: 1.3 }}
+            >
+              Donate Now
+            </motion.button>{" "}
+            <motion.button
+              whileHover={{scale:1.2,}}
+              onClick={() => {token?navigate("/dashboard"):navigate("/login")}}
+              className="bg-white hover:bg-gray-100 text-green-700 px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.9, duration: 1.3 }}
+            >
+              Dashboard
+            </motion.button>
           </div>
         </div>
       </motion.section>

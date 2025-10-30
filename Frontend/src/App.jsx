@@ -49,7 +49,6 @@ function App() {
 
   return (
     <>
-      {/* ✅ Navbar visible on desktop or when not on dashboard */}
       {!isDashboard && <Navbar />}
       {isDashboard && (
         <>
@@ -137,7 +136,7 @@ function App() {
         </>
       )}
 
-      {/* 🛤️ Routes */}
+    
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
