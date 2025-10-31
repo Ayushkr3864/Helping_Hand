@@ -49,29 +49,34 @@ function AsideBar() {
           <Link
             to="/dashboard"
             className="block px-4 py-2 rounded-lg text-blue-800 font-medium hover:bg-blue-100 transition"
-            onClick={() => setIsOpen(false)}
+            
           >
             🏠 Dashboard
           </Link>
           <Link
             to="/dashboard/donate"
             className="block px-4 py-2 rounded-lg text-blue-800 font-medium hover:bg-blue-100 transition"
-            onClick={() => setIsOpen(false)}
+           
           >
             💰 Donate
           </Link>
           <Link
             to="/dashboard/events"
             className="block px-4 py-2 rounded-lg text-blue-800 font-medium hover:bg-blue-100 transition"
-            onClick={() => setIsOpen(false)}
+           
           >
             📅 Events
           </Link>
-
+          <Link
+            to="/"
+            className="block px-4 py-2 rounded-lg text-blue-800 font-medium hover:bg-blue-100 transition"
+           
+          >
+            🏡 Home
+          </Link>
           <button
             onClick={() => {
               handleLogout();
-              
             }}
             className="w-full text-left block px-4 py-2 mt-4 rounded-lg bg-red-600 text-white hover:bg-blue-700 font-semibold transition"
           >
