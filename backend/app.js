@@ -15,6 +15,7 @@ const corsOptions = {
     "http://10.150.119.122:5173",
     "http://localhost:5173",
     "capacitor://localhost",
+    "https://localhost",
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
