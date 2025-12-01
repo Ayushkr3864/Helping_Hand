@@ -15,7 +15,7 @@ export default function MobileNavbar() {
     { name: "Home", path: "/", icon: <AiFillHome size={22} /> },
     { name: "About", path: "/about", icon: <FaInfoCircle size={22} /> },
     { name: "Programs", path: "/programs", icon: <MdCategory size={22} /> },
-    { name: "Gallery", path: "/gallery", icon: <FaImages size={22} /> },
+    { name: "Dasboard", path: "/dashboard", icon: <FaImages size={22} /> },
   ];
 
   return (
