@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { Capacitor } from "@capacitor/core";
-import AppNavbar from "./components/AppNavbar"
 import Navbar from "./components/Navbar";
 import { Route, Routes, useLocation, Link, useNavigate } from "react-router";
 import Home from "./pages/Home";
@@ -29,7 +27,7 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [userData, setUserData] = useState(null);
- const isApp = Capacitor.isNativePlatform();
+
   const isDashboard = location.pathname.startsWith("/dashboard");
 
   useEffect(() => {
@@ -196,7 +194,6 @@ function App() {
         />
         <Route path="*" element={<Pagenotfound />} />
       </Routes>
-          {isApp && <AppNavbar/>}
       <Footer />
     </>
   );
