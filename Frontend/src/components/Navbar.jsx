@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { NavLink, Link,useLocation } from 'react-router';
 import Hamburger from 'hamburger-react';
-
+import { Capacitor } from "@capacitor/core";
 
 function Navbar() {
   const [Isopen, setIsopen] = useState(false)
-
-  
+ const isApp = Capacitor.isNativePlatform();
+   if (isApp) return null;
   const location = useLocation();
   return (
     <>
