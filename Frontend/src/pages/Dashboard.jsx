@@ -6,146 +6,134 @@ import { motion } from "framer-motion";
 import Hamburger from "hamburger-react";
 
 export default function VendorDashboard() {
-  const { removeTokenFromLS, userInfo, getTokenFromLS, DonationInfo } =
-    useAuth();
+  const { userInfo, DonationInfo } = useAuth();
   const [userData, setuserData] = useState(null);
   const [donationData, setdonationData] = useState(null);
   const [donations, setdonations] = useState([]);
   const [lastdonated, setlastdonated] = useState(null);
-   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const FetchUser = async () => {
-      let userData = await userInfo();
-      setuserData(userData.user);
-    };
-    FetchUser();
+    (async () => {
+      const data = await userInfo();
+      setuserData(data.user);
+    })();
   }, []);
 
   useEffect(() => {
-    const fetchDonation = async () => {
-      let donation = await DonationInfo();
+    (async () => {
+      const donation = await DonationInfo();
       setdonationData(donation.summary);
       setdonations(donation.summary.donations || []);
       setlastdonated(donation.lastDonated);
-    };
-    fetchDonation();
+    })();
   }, []);
 
   return (
-    <>
-      <div className=" min-h-screen flex   bg-blue-50">
-        {/* Sidebar */}
-        {/* <div className="absolute top-10 left-4 z-50 md:hidden">
-          <Hamburger
-            toggled={isSidebarOpen}
-            toggle={setIsSidebarOpen}
-            size={22}
-            color="#1e3a8a"
-          />
-        </div> */}
+    <div className="min-h-screen flex bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100">
+      {/* Mobile Hamburger */}
+      <div className="fixed top-5 left-4 z-50 md:hidden">
+        <Hamburger
+          toggled={isSidebarOpen}
+          toggle={setIsSidebarOpen}
+          size={22}
+          color="#312e81"
+        />
+      </div>
 
-        {/* Sidebar */}
-        <div
-          className={`fixed md:static top-0 left-0 h-full z-40 transition-transform duration-300
-        `}
+      {/* Sidebar */}
+      <motion.div
+        className={`fixed md:static top-0 left-0 h-full z-40 bg-white shadow-xl`}
+        initial={{ x: -300 }}
+        animate={{ x: isSidebarOpen || window.innerWidth >= 768 ? 0 : -300 }}
+        transition={{ type: "spring", stiffness: 80 }}
+      >
+        <AsideBar />
+      </motion.div>
+
+      {/* Main Content */}
+      <main className="flex-1 p-6 md:p-10 space-y-10">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <AsideBar />
-        </div>
+          <h1 className="text-4xl font-extrabold text-indigo-900">
+            Welcome back, {userData?.name || "User"} 👋
+          </h1>
+          <p className="text-indigo-600 mt-1">
+            Here’s a snapshot of your donations
+          </p>
+        </motion.div>
 
-       
-        {/* Main Content */}
-        <main className="flex-1 p-6 space-y-8">
-          {/* Dashboard Title */}
-
-          <motion.h1
-            className="text-3xl font-bold text-blue-900 mb-4"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            User Dashboard
-          </motion.h1>
-
-          {/* Donation Summary */}
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Card */}
           <motion.div
-            id="dashboard"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { staggerChildren: 0.2 },
-              },
-            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="backdrop-blur-xl bg-white/70 rounded-3xl p-6 shadow-xl border border-white"
           >
-            <motion.div
-              className="bg-gradient-to-r from-green-400 to-green-600 text-white rounded-2xl shadow-lg p-6 text-center"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-            >
-              <h3 className="text-lg font-semibold">Items Donated</h3>
-              <p className="text-3xl font-bold mt-2">
-                {donationData
-                  ? donationData.donations.length
-                  : "no item donated yet"}
-              </p>
-            </motion.div>
-
-            <motion.div
-              className="bg-gradient-to-r from-pink-400 to-pink-600 text-white rounded-2xl shadow-lg p-6 text-center"
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 },
-              }}
-            >
-              <h3 className="text-lg font-semibold">Last Donation</h3>
-              <p className="text-xl font-bold mt-2">
-                {lastdonated
-                  ? new Date(lastdonated.donatedAt).toLocaleDateString()
-                  : "nothing donated yet"}
-              </p>
-            </motion.div>
+            <h3 className="text-sm text-gray-500">Total Donations</h3>
+            <p className="text-4xl font-bold text-green-600 mt-2">
+              {donationData ? donationData.donations.length : 0}
+            </p>
           </motion.div>
 
-          {/* Donation History Table */}
+          {/* Card */}
           <motion.div
-            className="bg-white shadow-lg rounded-2xl md:p-6 border border-blue-200"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="backdrop-blur-xl bg-gradient-to-br from-pink-400 to-purple-500 text-white rounded-3xl p-6 shadow-xl"
           >
-            <h2 className="text-xl font-semibold text-blue-800 mb-4">
-              Donation History
-            </h2>
-            <table className="w-full border border-blue-200 rounded-lg text-center">
-              <thead className="bg-blue-100 text-blue-800">
+            <h3 className="text-sm opacity-90">Last Donation</h3>
+            <p className="text-xl font-bold mt-2">
+              {lastdonated
+                ? new Date(lastdonated.donatedAt).toLocaleDateString()
+                : "No donation yet"}
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Donation History */}
+        <motion.div
+          className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-white"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h2 className="text-2xl font-bold text-indigo-800 mb-6">
+            Donation History
+          </h2>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead className="text-indigo-700 border-b">
                 <tr>
-                  <th className="text-center">Date</th>
-                  <th className="text-center">Type</th>
-                  <th className="text-center">Details</th>
-                  <th className="text-center">Value</th>
+                  <th className="py-3">Date</th>
+                  <th>Type</th>
+                  <th>Details</th>
+                  <th>Value</th>
                 </tr>
               </thead>
+
               <tbody>
                 {donations.map((donation, index) => (
                   <motion.tr
                     key={donation._id || index}
-                    className="border-t border-blue-200"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: index * 0.1 }}
+                    className="border-b hover:bg-indigo-50 cursor-pointer"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ scale: 1.01 }}
                   >
-                    <td>{new Date(donation.createdAt).toLocaleDateString()}</td>
-                    <td>{donation.DonationType}</td>
-                    <td className="p-3">N/A</td>
-                    <td>
+                    <td className="py-3">
+                      {new Date(donation.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="capitalize">{donation.DonationType}</td>
+                    <td>N/A</td>
+                    <td className="font-semibold">
                       {donation.DonationType === "money"
                         ? `₹${donation.Amount}`
                         : donation.Amount}
@@ -154,9 +142,9 @@ export default function VendorDashboard() {
                 ))}
               </tbody>
             </table>
-          </motion.div>
-        </main>
-      </div>
-    </>
+          </div>
+        </motion.div>
+      </main>
+    </div>
   );
 }
