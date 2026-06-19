@@ -1,201 +1,249 @@
-import React, { useState, useEffect } from "react";
-import { delay, motion } from "framer-motion";
-import { Heart, Users, Book, Leaf, Stethoscope } from "lucide-react";
-import hand from "../assets/hand.png";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  Book,
+  Heart,
+  Leaf,
+  LayoutDashboard,
+  LogIn,
+  ShieldCheck,
+  Sparkles,
+  Stethoscope,
+  Users,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../store/Auth";
 
-function Hero() {
-  const [hidden, setHidden] = useState(false);
-  const navigate = useNavigate()
-  const token = localStorage.getItem("token")
-  const programs = [
-    {
-      title: "Annapurna Sewa",
-      desc: "Weekly/biweekly food distribution drives.",
-      icon: Heart,
-    },
-    {
-      title: "Pathshala 51",
-      desc: "Free JNV entrance coaching for 51 underprivileged students.",
-      icon: Book,
-    },
-    {
-      title: "Environment Care",
-      desc: "Plantation drives & cleanliness campaigns.",
-      icon: Leaf,
-    },
-    {
-      title: "Donation Drives",
-      desc: "Books, clothes, and essentials collection & distribution.",
-      icon: Users,
-    },
-    {
-      title: "Healthcare & Hygiene",
-      desc: "Basic health checkups and hygiene kit distribution.",
-      icon: Stethoscope,
-    },
-  ];
+const programs = [
+  {
+    title: "Annapurna Sewa",
+    desc: "Weekly and biweekly food distribution drives for families who need dependable support.",
+    icon: Heart,
+  },
+  {
+    title: "Pathshala 51",
+    desc: "Free JNV entrance coaching that opens real academic opportunity for underserved students.",
+    icon: Book,
+  },
+  {
+    title: "Environment Care",
+    desc: "Plantation and cleanliness campaigns that build healthier neighborhoods together.",
+    icon: Leaf,
+  },
+  {
+    title: "Donation Drives",
+    desc: "Books, clothes, and essentials collected and delivered with dignity.",
+    icon: Users,
+  },
+  {
+    title: "Healthcare and Hygiene",
+    desc: "Basic health checkups and hygiene-kit access for vulnerable communities.",
+    icon: Stethoscope,
+  },
+];
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     setHidden(window.scrollY > 100);
-  //   };
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
+const impactStats = [
+  { value: "5+", label: "active community programs" },
+  { value: "Youth-led", label: "built by volunteers and local action" },
+  { value: "Year-round", label: "support across food, education, and care" },
+];
+
+function Home() {
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   return (
-    <>
-      {/* Hero Section */}
+    <div className="bg-[#081118] text-white">
       <motion.section
-        className="relative h-[90vh] sm:h-screen  bg-center flex items-center"
-        style={{
-          backgroundImage: "url('/image.png')",
-          backgroundSize: "cover",
-        }} // place image in /public
+        className="relative overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/40"></div>
-
-        {/* Content */}
-        <div className="relative z-10 md:max-w-xl px-4 sm:px-6 text-left text-white ">
-          <motion.img
-            src="/heart-unscreen.gif"
-            alt="hand"
-            className="md:h-30 md:w-60 h-20 w-30"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+        <div className="absolute inset-0">
+          <div
+            className="h-full w-full bg-cover bg-center"
+            style={{ backgroundImage: "url('/image.png')" }}
           />
-          <motion.h1
-            className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
-            Helping <br /> Hand <br /> Foundation
-          </motion.h1>
-          <motion.p
-            className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-medium"
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.9 }}
-          >
-            Small Steps. Big Change. 🌍
-          </motion.p>
-          <motion.p
-            className="mt-2 text-sm sm:text-base md:text-lg"
-            initial={{ opacity: 0, y: 80 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 1.1 }}
-          >
-            Youth-led non-profit initiative serving underprivileged communities
-            with food, education, healthcare, and dignity.
-          </motion.p>
+          <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(8,17,24,0.94),rgba(8,17,24,0.82),rgba(8,17,24,0.55))]" />
+          <div className="absolute left-[-10%] top-[-10%] h-56 w-56 rounded-full bg-emerald-400/20 blur-3xl" />
+          <div className="absolute bottom-[-5%] right-[-5%] h-72 w-72 rounded-full bg-cyan-400/15 blur-3xl" />
+        </div>
 
-          <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <motion.button
-              onClick={() => navigate("/login")}
-              className="bg-green-700 hover:bg-green-800 text-white px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.9, duration: 1.3 }}
+        <div className="relative mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-20">
+          <div className="flex flex-col justify-center">
+            <motion.div
+              className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-emerald-300/20 bg-white/5 px-4 py-2 text-sm text-emerald-200 backdrop-blur"
+              initial={{ y: 18, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
             >
-              Donate Now
-            </motion.button>{" "}
-            <motion.button
-              whileHover={{scale:1.2,}}
-              onClick={() => {token?navigate("/dashboard"):navigate("/login")}}
-              className="bg-white hover:bg-gray-100 text-green-700 px-5 py-2 sm:px-6 sm:py-3 rounded-lg shadow-lg font-semibold text-sm sm:text-base"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.9, duration: 1.3 }}
+              <Sparkles className="h-4 w-4" />
+              Small steps. Big change.
+            </motion.div>
+
+            <motion.h1
+              className="max-w-3xl text-4xl font-black leading-tight sm:text-5xl lg:text-7xl"
+              initial={{ y: 24, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
             >
-              Dashboard
-            </motion.button>
+              Helping Hand Foundation builds community support with action, not just promises.
+            </motion.h1>
+
+            <motion.p
+              className="mt-6 max-w-2xl text-base leading-7 text-slate-200 sm:text-lg"
+              initial={{ y: 24, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.35, duration: 0.6 }}
+            >
+              We are a youth-led non-profit serving underprivileged communities through food distribution, education, healthcare, and dignity-driven outreach.
+            </motion.p>
+
+            <motion.div
+              className="mt-8 flex flex-col gap-3 sm:flex-row"
+              initial={{ y: 24, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <button
+                onClick={() => navigate(isLoggedIn ? "/dashboard/donate" : "/login")}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-400 px-6 py-3 font-semibold text-slate-950 shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-300"
+              >
+                {isLoggedIn ? "Donate Now" : "Login to Donate"}
+                <ArrowRight className="h-4 w-4" />
+              </button>
+
+              <button
+                onClick={() => navigate(isLoggedIn ? "/dashboard" : "/login")}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/8 px-6 py-3 font-semibold text-white backdrop-blur transition hover:bg-white/15"
+              >
+                {isLoggedIn ? (
+                  <>
+                    <LayoutDashboard className="h-4 w-4" />
+                    Go to Dashboard
+                  </>
+                ) : (
+                  <>
+                    <LogIn className="h-4 w-4" />
+                    Login
+                  </>
+                )}
+              </button>
+            </motion.div>
+
+            <motion.div
+              className="mt-10 grid gap-4 sm:grid-cols-3"
+              initial={{ y: 24, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.65, duration: 0.6 }}
+            >
+              {impactStats.map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-3xl border border-white/10 bg-white/6 p-5 backdrop-blur"
+                >
+                  <p className="text-2xl font-bold text-emerald-300">{item.value}</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-200">{item.label}</p>
+                </div>
+              ))}
+            </motion.div>
           </div>
+
+          <motion.div
+            className="flex items-end lg:justify-end"
+            initial={{ x: 30, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.35, duration: 0.7 }}
+          >
+            <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-white/8 p-6 shadow-2xl shadow-black/30 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="rounded-2xl bg-emerald-400/15 p-3 text-emerald-300">
+                  <ShieldCheck className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-sm uppercase tracking-[0.25em] text-emerald-200/75">
+                    Our Promise
+                  </p>
+                  <h2 className="text-2xl font-bold">Compassion with consistency</h2>
+                </div>
+              </div>
+
+              <div className="mt-6 space-y-4 text-sm leading-7 text-slate-200">
+                <p>
+                  We began with simple food drives and grew into a wider mission across education, healthcare, environmental care, and community development.
+                </p>
+                <p>
+                  Every program is designed to be practical, local, and human-first so support feels reachable, respectful, and real.
+                </p>
+              </div>
+
+              <div className="mt-6 rounded-3xl bg-slate-950/55 p-5">
+                <p className="text-sm uppercase tracking-[0.25em] text-emerald-200/75">
+                  Vision
+                </p>
+                <p className="mt-3 text-base leading-7 text-white">
+                  A society where no one sleeps hungry, every child learns with opportunity, and communities grow with hope.
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </motion.section>
 
-      {/* About Section */}
-      <section id="programs" className=" sm:py-5 px-4 mt-10 mb-10 ">
-        <div className="bg-[#26344a] rounded-2xl p-5 shadow-[0_0px_3px_#d0d0d1] hover:shadow-[0_6px_16px_#d0d0d1]">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#64ffda] sm:mb-5">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-emerald-300/80">
             Who We Are
-          </h1>
-          <p className="text-center text-[#e6f1ff]">
-            "We started with small food distribution drives and today have
-            expanded into education, healthcare, environment, and community
-            development."
+          </p>
+          <h2 className="mt-4 text-3xl font-bold text-white sm:text-4xl">
+            Local action that stays grounded in dignity
+          </h2>
+          <p className="mt-5 text-base leading-7 text-slate-300">
+            Helping Hand Foundation focuses on direct, people-centered support. We meet urgent needs while creating room for longer-term growth through learning, health, and collective care.
           </p>
         </div>
       </section>
 
-      {/* Programs Section (optional, uncomment if you want) */}
-      <section id="programs" className="py-12 sm:py-16 px-4 bg-[#26344a]">
-        <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-green-700 mb-6 sm:mb-10">
-          Our Core Programs
-        </h3>
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 max-w-6xl mx-auto">
-          {programs.map((program, idx) => (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: idx * 0.2 }}
-              viewport={{ once: true, amount: 0.2 }}
-              key={idx}
-              className="rounded-2xl shadow-[0_2px_2px_#d0d0d1] hover:shadow-[0_6px_16px_#d0d0d1] transition"
-            >
-              <div className="p-6 text-center">
-                <program.icon className="w-10 h-10 sm:w-12 sm:h-12 text-green-600 mx-auto" />
-                <h4 className="mt-4 font-semibold text-lg text-[#64ffda] sm:text-xl">
-                  {program.title}
-                </h4>
-                <p className="text-[#e6f1ff] mt-2 text-sm sm:text-base">
-                  {program.desc}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+      <section className="bg-[#0d1821] py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-emerald-300/80">
+                Core Programs
+              </p>
+              <h3 className="mt-4 text-3xl font-bold text-white sm:text-4xl">
+                Practical support across the issues that matter most
+              </h3>
+            </div>
+            <p className="max-w-xl text-sm leading-6 text-slate-300">
+              Each initiative is built to serve a real need in the community and deliver help with continuity, care, and trust.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {programs.map((program, idx) => (
+              <motion.div
+                key={program.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.45, delay: idx * 0.1 }}
+                className="group rounded-[1.75rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-6 transition hover:-translate-y-1 hover:border-emerald-300/20 hover:shadow-xl hover:shadow-emerald-900/10"
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-300 transition group-hover:bg-emerald-400/20">
+                  <program.icon className="h-7 w-7" />
+                </div>
+                <h4 className="mt-5 text-xl font-semibold text-white">{program.title}</h4>
+                <p className="mt-3 text-sm leading-7 text-slate-300">{program.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
-      {/* mission section */}
-      <section id="programs" className=" sm:py-5 px-4 ">
-        <motion.div
-          className="bg-[#26344a] rounded-2xl py-5 mt-10 shadow-[0_2px_6px_#d0d0d1] hover:shadow-[0_6px_16px_#d0d0d1]"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: false, amount: 0.2 }}
-        >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#64ffda] sm:mb-5">
-            Our Mission
-          </h1>
-          <p className="text-center text-[#e6f1ff]">
-            “To serve underprivileged communities by providing food, education,
-            healthcare, and dignity—while promoting compassion and equality.”
-          </p>
-        </motion.div>
-      </section>
-      <section id="programs" className=" sm:py-5 px-4 mt-10 md:mt-0 ">
-        <motion.div
-          className="bg-[#26344a] rounded-2xl py-5 shadow-[0_2px_6px_#d0d0d1] hover:shadow-[0_6px_16px_#d0d0d1]"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: false, amount: 0.2 }}
-        >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-[#64ffda] sm:mb-5">
-            Our Vision
-          </h1>
-          <p className="text-center text-[#e6f1ff]">
-            “We envision a society where no one sleeps hungry, every child
-            learns with opportunity, and communities grow with hope.”
-          </p>
-        </motion.div>
-      </section>
-    </>
+    </div>
   );
 }
 
-export default Hero;
+export default Home;

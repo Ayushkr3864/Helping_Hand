@@ -18,72 +18,115 @@
 // export const useAuth = () => {
 //     return useContext(AuthContext);
 // }
-import React, { useCallback, useEffect, useState } from 'react'
-import { createContext } from 'react'
-import { useContext } from 'react'
+import React, { useCallback, useEffect, useState } from "react";
+import { createContext } from "react";
+import { useContext } from "react";
 
 export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
-  const [userData, setuserData] = useState(null)
-  const [donation,setdonation] = useState(null)
-  // store token
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [userData, setUserData] = useState(null);
+  const [donation, setDonation] = useState(null);
+
   const storeTokenInLS = (serverToken) => {
-    return localStorage.setItem("token",serverToken)
-  }
-  // clear token
-  const removeTokenFromLS = ()=> {
-    localStorage.clear();
-  }
-  // get token
+    localStorage.setItem("token", serverToken);
+    setToken(serverToken);
+  };
+
+  const removeTokenFromLS = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("image");
+    setToken(null);
+    setUserData(null);
+    setDonation(null);
+  };
+
   const getTokenFromLS = () => {
     return localStorage.getItem("token");
-  }
+  };
+
+  const isLoggedIn = Boolean(token);
+
   const userInfo = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return null;
+      const currentToken = localStorage.getItem("token");
+      if (!currentToken) {
+        setUserData(null);
+        return null;
+      }
+
       const res = await fetch(`https://helping-hand-2pny.onrender.com/user`, {
         method: "get",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${currentToken}` },
       });
+
+      if (!res.ok) {
+        removeTokenFromLS();
+        return null;
+      }
+
       const data = await res.json();
-      setuserData(data);
-      
+      setUserData(data);
       return data;
     } catch (e) {
       console.log(e.message);
+      return null;
     }
   }, []);
+
   const DonationInfo = useCallback(async () => {
     try {
-      const token = localStorage.getItem("token");
-    if (!token) return null;
-    else {
+      const currentToken = localStorage.getItem("token");
+      if (!currentToken) return null;
+
       const res = await fetch(
         `https://helping-hand-2pny.onrender.com/find/donate`,
         {
           method: "get",
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${currentToken}` },
         }
       );
+
+      if (!res.ok) {
+        return null;
+      }
+
       const data = await res.json();
-      setdonation(data.summary);
+      setDonation(data.summary);
       return data;
-    }
     } catch (e) {
       console.log(e.message);
-      
-   }
-  },[getTokenFromLS])
- 
+      return null;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      userInfo();
+    }
+  }, [token, userInfo]);
+
   return (
-    <AuthContext.Provider value={{storeTokenInLS,removeTokenFromLS,userInfo,getTokenFromLS,DonationInfo}}>
+    <AuthContext.Provider
+      value={{
+        storeTokenInLS,
+        removeTokenFromLS,
+        userInfo,
+        getTokenFromLS,
+        DonationInfo,
+        userData,
+        donation,
+        isLoggedIn,
+        token,
+      }}
+    >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
+
 export const useAuth = () => {
-  return useContext(AuthContext)
-  
-}
+  return useContext(AuthContext);
+};
+
 export default AuthProvider;

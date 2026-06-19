@@ -23,24 +23,17 @@ import { useAuth } from "./store/Auth";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
-  const { removeTokenFromLS, userInfo } = useAuth();
+  const { removeTokenFromLS, userData, userInfo } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [userData, setUserData] = useState(null);
 
   const isDashboard = location.pathname.startsWith("/dashboard");
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const data = await userInfo();
-        setUserData(data);
-      } catch (error) {
-        console.error("Failed to fetch user info:", error);
-      }
-    };
-    fetchUser();
-  }, [userInfo]);
+    if (isDashboard) {
+      userInfo();
+    }
+  }, [isDashboard, userInfo]);
 
   const handleLogout = () => {
     removeTokenFromLS();

@@ -1,10 +1,11 @@
-import React from 'react'
-import { Navigate } from 'react-router'
+import React from "react";
+import { Navigate } from "react-router";
+import { useAuth } from "../store/Auth";
 
 function ProtectedRoute({children}) {
-    const token = localStorage.getItem("token")
+    const { isLoggedIn } = useAuth();
   return (
-     token?children:<Navigate to="/login" replace/>
+     isLoggedIn ? children : <Navigate to="/login" replace/>
   )
 }
 
