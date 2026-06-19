@@ -136,6 +136,10 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.get("/health-check", (req, res) => {
+  res.send("ok");
+})
+
 // Admin Login Route
 app.post("/api/admin/login", async (req, res) => {
   try {

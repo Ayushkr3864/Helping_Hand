@@ -20,6 +20,7 @@ import Footer from "./components/Footer";
 import Pagenotfound from "./pages/Pagenotfound";
 import Hamburger from "hamburger-react";
 import { useAuth } from "./store/Auth";
+import AllNgos from "./pages/AllNgos";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -137,6 +138,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/programs" element={<Programs />} />
+        <Route path="/ngos" element={<AllNgos />} />
         <Route
           path="/admin/users"
           element={

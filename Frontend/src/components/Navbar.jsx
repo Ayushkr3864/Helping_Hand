@@ -10,6 +10,7 @@ const navItems = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
   { label: "Programs", to: "/programs" },
+  { label: "NGOs", to: "/ngos" },
 ];
 
 function Navbar() {
